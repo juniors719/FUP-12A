@@ -5,12 +5,21 @@ int eh_numero(char caractere){
     else return 0;
 }
 int main(){
-    char frase[101];
+    char frase[200];
     int soma = 0;
-    scanf("%[^\n]", frase);
+    
+    scanf("%[^\n]s", frase);
     for(int i = 0; i < strlen(frase); i++){
+        int n = 0;
         if(eh_numero(frase[i])){
-            int n = frase[i] - 48;
+            n = (int)frase[i] - 48;
+            int a = i + 1;
+            while(eh_numero(frase[a])){
+                n *= 10;
+                n += (int)frase[a] - 48;
+                a++;
+            }
+            i = a;
             soma += n;
         }
     }

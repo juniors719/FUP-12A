@@ -1,46 +1,55 @@
-// Pedrinho quer saber qual o maior palíndromo formado pelo produto de 2 números de N dígitos. AjudePedrinho nessa missão.
-// Ação
-// Dado dois inteiros N e M, retornar os M maiores palíndromos formados pelo produto de dois números de N dígitos.
-
-// Entrada:
-// 2 Inteiros N, M.
-
-// Saida:
-// Os M maiores palíndromos formados pelo produto de dois números cuja quantidade de dígitos é N.
-
-// Exemplos
-// >>>>>>>>
-// 2 3
-// ========
-// 9009
-// 8448
-// 8118
-// <<<<<<<<
-
-// USE VETOR
-
 #include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+
+int ehpalindromo(char str[]){
+    for(int i = 0, j = strlen(str)-1; i < strlen(str); i++, j--){
+        if(str[i] != str[j]) return 0;
+    }
+    return 1;
+}
+
+void insertionSort(int arr[], int size){
+    int i, j, key;
+    for (i = 1; i < size; i++) {
+        key = arr[i];
+        j = i;
+        while (j > 0 && arr[j-1] < key) {
+            arr[j] = arr[j-1];
+            j--;
+        }
+        arr[j] = key;
+    }
+}
+
+int inVector(int arr[], int size, int numero){
+    for(int i = 0; i < size; i++){
+        if(arr[i] == numero) return 1;
+    }
+    return 0;
+}
+
 int main(){
-    int n, m; scanf("%d %d", &n, &m);
-    int maior = 0;
-    for(int i = 0; i < n; i++) maior = maior * 10 + 9;
-    int menor = maior / 10;
-    int palindromos[m];
-    int indice = 0;
-    for(int i = maior; i > menor; i--){
-        for(int j = maior; j > menor; j--){
-            int produto = i * j;
-            int aux = produto;
-            int inverso = 0;
-            while(aux > 0){
-                inverso = inverso * 10 + aux % 10;
-                aux /= 10;
-            }
-            if(produto == inverso){
-                palindromos[indice] = produto;
-                indice++;
+    int nDigitos, nPalindromos, qPalindromos = 0;
+    scanf("%d %d", &nDigitos, &nPalindromos);
+    int palindromos[300];
+    int inicial = (pow(10, nDigitos))-1;
+    int final = (pow(10, (nDigitos-1)));
+    for(int i = inicial; i >= (inicial / 2); i--){
+        for(int j = inicial; j >= (inicial / 2); j--){
+            if(nPalindromos == 0) return 0;
+            char resultado[15];
+            int r = i * j;
+            sprintf(resultado, "%d", r);
+            if(ehpalindromo(resultado)){
+                int resultadoint = atoi(resultado);
+                if(!inVector(palindromos, qPalindromos, resultadoint)){palindromos[qPalindromos++] = resultadoint;}
             }
         }
     }
-    for(int i = 0; i < m; i++) printf("%d\n", palindromos[i]);
+    insertionSort(palindromos, qPalindromos);
+    for(int i = 0; i < nPalindromos; i++){
+        printf("%d\n", palindromos[i]);
+    }
 }
